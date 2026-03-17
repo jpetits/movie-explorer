@@ -40,3 +40,10 @@ export async function searchMoviesByGenre(genreId: number): Promise<Movie[]> {
     .discover.movie({ with_genres: genreId.toString() })
     .then((data) => data.results);
 }
+
+export async function similarMovies(movieId: number): Promise<Movie[]> {
+  return await getTmdb()
+    .movies.similar(movieId)
+    .then((data) => data.results)
+    .catch(() => []);
+}

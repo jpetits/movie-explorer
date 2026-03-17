@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { fetchMovie } from "../../lib/data";
+import { fetchMovie, similarMovies } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import Link from "next/link";
@@ -12,7 +12,9 @@ export default async function Detail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const movie = await fetchMovie(parseInt(id));
+  const movieId = parseInt(id);
+  const movie = await fetchMovie(movieId);
+  const similarMovieList = await similarMovies(movieId);
   if (!movie) notFound();
 
   return (
@@ -46,6 +48,20 @@ export default async function Detail({
             width={500}
             height={750}
           />
+        )}
+        {similarMovies.length > 0 && (
+          <div className="mt-6">
+            <h3>Similar Movies</h3>
+            <ul>
+              {similarMovieList.map((similar) => (
+                <li key={similar.id}>
+                  <Link href={ROUTES.detail(similar.id.toString())}>
+                    {similar.title} ({similar.release_date})
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </>
