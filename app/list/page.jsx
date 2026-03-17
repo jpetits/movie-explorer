@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ROUTES } from "@/app/routing/constants";
 import { fetchPopularMovies, tmdbImageUrl } from "../lib/data";
 
 export default async function List() {
@@ -8,7 +9,7 @@ export default async function List() {
   return (
     <>
       {movieList.map((movie) => (
-        <Link key={movie.id} href={`/detail/${movie.id}`}>
+        <Link key={movie.id} href={ROUTES.detail(movie.id.toString())}>
           <h2>{movie.title}</h2>
           <p>Release Date: {movie.release_date}</p>
           <p>Rating: {movie.vote_average}</p>

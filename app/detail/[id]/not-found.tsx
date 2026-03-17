@@ -1,3 +1,4 @@
+import { ROUTES } from "@/app/routing/constants";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -7,7 +8,7 @@ export default function NotFound() {
       <p className="text-zinc-500">
         {"The movie you're looking for doesn't exist."}
       </p>
-      <Link href="/list" className="text-sm underline underline-offset-4">
+      <Link href={ROUTES.list} className="text-sm underline underline-offset-4">
         Back to list
       </Link>
     </div>
