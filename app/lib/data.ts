@@ -3,11 +3,13 @@
 import { getTmdb } from "./tmdb";
 import { Movie } from "../types/types";
 
-export async function fetchPopularMovies(): Promise<Movie[]> {
+export async function fetchPopularMovies(
+  page = 1,
+): Promise<{ results: Movie[]; total_pages: number }> {
   return await getTmdb()
-    .movies.popular()
-    .then((data) => data.results)
-    .catch(() => []);
+    .movies.popular({ page })
+    .then((data) => ({ results: data.results, total_pages: data.total_pages }))
+    .catch(() => ({ results: [], total_pages: 0 }));
 }
 
 export async function fetchMovie(id: number): Promise<Movie | null> {
