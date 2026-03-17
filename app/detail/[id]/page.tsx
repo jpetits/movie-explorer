@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { fetchMovie, tmdbImageUrl } from "../../lib/data";
+import { fetchMovie } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
+import { tmdbImageUrl } from "../../lib/tmdb";
 
 export default async function Detail({
   params,

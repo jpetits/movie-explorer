@@ -1,17 +1,18 @@
-import { Movie } from "../types/types";
-import { tmdb } from "./tmdb";
+"use server";
 
-export const tmdbImageUrl = "https://image.tmdb.org/t/p/w500";
+import { getTmdb } from "./tmdb";
+import { Movie } from "../types/types";
+
 export async function fetchPopularMovies(): Promise<Movie[]> {
-  return await tmdb.movies
-    .popular()
+  return await getTmdb()
+    .movies.popular()
     .then((data) => data.results)
     .catch(() => []);
 }
 
 export async function fetchMovie(id: number): Promise<Movie | null> {
-  return await tmdb.movies
-    .details(id)
+  return await getTmdb()
+    .movies.details(id)
     .then((data) => ({
       id: data.id,
       title: data.title,
@@ -23,8 +24,8 @@ export async function fetchMovie(id: number): Promise<Movie | null> {
 }
 
 export async function searchMovies(query: string): Promise<Movie[]> {
-  return await tmdb.search
-    .movies({ query })
+  return await getTmdb()
+    .search.movies({ query })
     .then((data) => data.results)
     .catch(() => []);
 }

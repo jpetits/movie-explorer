@@ -20,7 +20,9 @@ export default function SearchMovie() {
       params.delete("query");
     }
 
-    setMovieList(await searchMovies(value));
+    const movieList = await searchMovies(value);
+
+    setMovieList(movieList);
 
     replace(`${pathname}?${params.toString()}`);
   }, 500);

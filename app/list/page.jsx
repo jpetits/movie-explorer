@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/app/routing/constants";
-import { fetchPopularMovies, tmdbImageUrl } from "../lib/data";
+import { fetchPopularMovies } from "../lib/data";
+import { tmdbImageUrl } from "../lib/tmdb";
 
 export default async function List() {
   const movieList = await fetchPopularMovies();
