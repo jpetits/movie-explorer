@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { fetchMovie } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
+import Link from "next/link";
+import { ROUTES } from "@/app/routing/constants";
 
 export default async function Detail({
   params,
@@ -10,7 +12,7 @@ export default async function Detail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const movie = await fetchMovie(parseInt(id, 10));
+  const movie = await fetchMovie(parseInt(id));
   if (!movie) notFound();
 
   return (
@@ -20,6 +22,23 @@ export default async function Detail({
         <h2>{movie.title}</h2>
         <p>Release Date: {movie.release_date}</p>
         <p>Rating: {movie.vote_average}</p>
+        {movie.overview && <p>{movie.overview}</p>}
+        {movie.tagline && <p className="italic">{movie.tagline}</p>}
+        {movie.genres && (
+          <p>
+            Genres:{" "}
+            {movie.genres.map((genre) => (
+              <Link
+                key={genre.id}
+                href={ROUTES.genre(genre.id.toString())}
+                className="mr-2"
+              >
+                {genre.name}
+              </Link>
+            ))}
+          </p>
+        )}
+        {movie.runtime && <p>Runtime: {movie.runtime} minutes</p>}
         {movie.poster_path && (
           <Image
             src={`${tmdbImageUrl}${movie.poster_path}`}

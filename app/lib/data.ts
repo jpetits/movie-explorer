@@ -19,6 +19,11 @@ export async function fetchMovie(id: number): Promise<Movie | null> {
       release_date: data.release_date,
       vote_average: data.vote_average,
       poster_path: data.poster_path,
+      overview: data.overview,
+      backdrop_path: data.backdrop_path,
+      genres: data.genres,
+      runtime: data.runtime,
+      tagline: data.tagline,
     }))
     .catch(() => null);
 }
@@ -28,4 +33,10 @@ export async function searchMovies(query: string): Promise<Movie[]> {
     .search.movies({ query })
     .then((data) => data.results)
     .catch(() => []);
+}
+
+export async function searchMoviesByGenre(genreId: number): Promise<Movie[]> {
+  return await getTmdb()
+    .discover.movie({ with_genres: genreId.toString() })
+    .then((data) => data.results);
 }
