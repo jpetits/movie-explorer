@@ -14,6 +14,9 @@ export default async function Detail({
 }) {
   const { id } = await params;
   const movieId = parseInt(id);
+  if (isNaN(movieId)) {
+    notFound();
+  }
   const [movie, resultSimilar] = await Promise.all([
     fetchMovie(movieId),
     similarMovies(movieId),

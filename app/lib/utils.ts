@@ -38,3 +38,14 @@ export function deduplicateIds<T extends { id: number }>(
   const uniqueList = nextToAppend.filter((movie) => !prevIdList.has(movie.id));
   return [...current, ...uniqueList];
 }
+
+export async function withResult<T>(
+  promise: Promise<T>,
+  error: string,
+): Promise<Result<T>> {
+  try {
+    return { success: true as const, data: await promise };
+  } catch {
+    return { success: false as const, error };
+  }
+}
