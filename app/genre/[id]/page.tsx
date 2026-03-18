@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ROUTES } from "@/app/routing/constants";
 import { searchMoviesByGenre } from "../../lib/data";
 import { tmdbImageUrl } from "../../lib/tmdb";
-import { notFound } from "next/navigation";
 import BackButton from "@/app/ui/backButton";
 import { formatDate } from "@/app/lib/utils";
 
@@ -14,12 +13,11 @@ export default async function Genre({
 }) {
   const { id } = await params;
   const result = await searchMoviesByGenre(parseInt(id));
-  if (!result.success) notFound();
 
   return (
     <>
       <BackButton />
-      {result.data.map((movie) => (
+      {result.map((movie) => (
         <Link key={movie.id} href={ROUTES.detail(movie.id.toString())}>
           <h2>{movie.title}</h2>
           <p>Release Date: {formatDate(movie.release_date)}</p>
