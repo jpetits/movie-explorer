@@ -5,6 +5,7 @@ import { searchMoviesByGenre } from "../../lib/data";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import BackButton from "@/app/ui/backButton";
 import { formatDate } from "@/app/lib/utils";
+import { notFound } from "next/navigation";
 
 export default async function Genre({
   params,
@@ -12,7 +13,12 @@ export default async function Genre({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const result = await searchMoviesByGenre(parseInt(id));
+  const genreId = parseInt(id);
+  if (isNaN(genreId)) {
+    notFound();
+  }
+
+  const result = await searchMoviesByGenre(genreId);
 
   return (
     <>
