@@ -13,9 +13,12 @@ export default async function Detail({
 }) {
   const { id } = await params;
   const movieId = parseInt(id);
-  const movie = await fetchMovie(movieId);
-  const similarMovieList = await similarMovies(movieId);
-  if (!movie) notFound();
+  const resultFetch = await fetchMovie(movieId);
+  const resultSimilar = await similarMovies(movieId);
+  if (!resultFetch.success) notFound();
+
+  const movie = resultFetch.data;
+  const similarMovieList = resultSimilar.success ? resultSimilar.data : [];
 
   return (
     <>

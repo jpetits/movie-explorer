@@ -12,13 +12,13 @@ export default async function Genre({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const movieList = await searchMoviesByGenre(parseInt(id));
-  if (!movieList) notFound();
+  const result = await searchMoviesByGenre(parseInt(id));
+  if (!result.success) notFound();
 
   return (
     <>
       <BackButton />
-      {movieList.map((movie) => (
+      {result.data.map((movie) => (
         <Link key={movie.id} href={ROUTES.detail(movie.id.toString())}>
           <h2>{movie.title}</h2>
           <p>Release Date: {movie.release_date}</p>
