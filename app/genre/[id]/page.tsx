@@ -13,8 +13,8 @@ export default async function Genre({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const genreId = parseInt(id);
-  if (isNaN(genreId)) {
+  const genreId = Number(id);
+  if (!genreId) {
     notFound();
   }
 
