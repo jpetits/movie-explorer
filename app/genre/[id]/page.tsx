@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ROUTES } from "@/app/routing/constants";
 import { searchMoviesByGenre } from "../../lib/data";
 import { tmdbImageUrl } from "../../lib/tmdb";
-import notFound from "./not-found";
+import { notFound } from "next/navigation";
 import BackButton from "@/app/ui/backButton";
 
 export default async function Genre({

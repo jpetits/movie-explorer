@@ -49,7 +49,7 @@ export default async function Detail({
             height={750}
           />
         )}
-        {similarMovies.length > 0 && (
+        {similarMovieList.length > 0 && (
           <div className="mt-6">
             <h3>Similar Movies</h3>
             <ul>
