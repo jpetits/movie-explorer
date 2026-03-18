@@ -17,7 +17,7 @@ export default function MovieList({
 }) {
   const [movieList, setMovieList] = useState(initialMovieList);
   const [page, setPage] = useState(1);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
