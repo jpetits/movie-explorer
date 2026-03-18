@@ -13,8 +13,10 @@ export default async function Detail({
 }) {
   const { id } = await params;
   const movieId = parseInt(id);
-  const resultFetch = await fetchMovie(movieId);
-  const resultSimilar = await similarMovies(movieId);
+  const [resultFetch, resultSimilar] = await Promise.all([
+    fetchMovie(movieId),
+    similarMovies(movieId),
+  ]);
   if (!resultFetch.success) notFound();
 
   const movie = resultFetch.data;
