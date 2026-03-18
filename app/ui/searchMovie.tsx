@@ -1,94 +1,29 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useId, useState, useTransition } from "react";
-import { useDebouncedCallback } from "use-debounce";
-import { searchMovies } from "../lib/data";
 import { Movie } from "../lib/schema";
-import Link from "next/link";
-import { ROUTES } from "../routing/constants";
-import { cn, formatDate, unwrapResult } from "../lib/utils";
+import MovieList from "./movieList";
+import { Result } from "../types/types";
 
 export default function SearchMovie({
-  initialMovies,
+  initialMovieList,
   initialError,
   searchQuery,
+  searchMovies,
 }: {
-  initialMovies: Movie[];
+  initialMovieList: Movie[];
   initialError: string | null;
-  searchQuery: string | undefined;
+  searchQuery: string;
+  searchMovies: (query: string, page: number) => Promise<Result<Movie[]>>;
 }) {
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const pathname = usePathname();
-  const [movieList, setMovieList] = useState<Movie[]>(initialMovies);
-  const [error, setError] = useState<string | null>(initialError);
-  const [isPending, startTransition] = useTransition();
-  const inputId = useId();
-
-  const handleSearch = useDebouncedCallback((value: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set("query", value);
-    } else {
-      params.delete("query");
-      setError(null);
-    }
-    replace(`${pathname}?${params.toString()}`);
-
-    startTransition(async () => {
-      if (!value.trim()) {
-        setMovieList([]);
-        return;
-      }
-      const result = await searchMovies(value);
-      const { data, error } = unwrapResult(result, []);
-      if (!error) {
-        setMovieList(data);
-        setError(null);
-      } else {
-        setError(error);
-        setMovieList([]);
-      }
-    });
-  }, 500);
-
   return (
     <div className="p-6">
-      <label htmlFor={inputId} className="block mb-1 text-sm font-medium">
-        Search movies
-      </label>
-      <input
-        id={inputId}
-        aria-busy={isPending}
-        onChange={(e) => handleSearch(e.target.value)}
-        defaultValue={searchQuery ?? ""}
-        className="border p-2 w-full"
-        placeholder="Search for a movie..."
-      />
-      {movieList.length > 0 && (
-        <ul
-          className={cn(
-            "mt-4",
-            "space-y-2",
-            isPending && "pointer-events-none opacity-50",
-          )}
-        >
-          {movieList.map((movie) => (
-            <li key={movie.id} className="border-b py-2">
-              <Link href={ROUTES.detail(movie.id.toString())}>
-                {movie.title} ({formatDate(movie.release_date)}
-              </Link>
-            </li>
-          ))}
-        </ul>
+      {searchQuery && (
+        <MovieList
+          initialMovieList={initialMovieList}
+          error={initialError}
+          fetchMore={(page) => searchMovies(searchQuery, page)}
+        />
       )}
-      {!isPending && movieList.length === 0 && searchQuery && (
-        <p className="mt-4">No movies found.</p>
-      )}
-
-      {error && <p className="text-red-500 mt-4">{error}</p>}
-      {isPending && <p className="mt-4">Searching...</p>}
     </div>
   );
 }
