@@ -40,6 +40,10 @@ export default function SearchMovie() {
     replace(`${pathname}?${params.toString()}`);
 
     startTransition(async () => {
+      if (!value.trim()) {
+        setMovieList([]);
+        return;
+      }
       const result = await searchMovies(value);
       if (result.success) {
         setMovieList(result.data);
@@ -58,6 +62,7 @@ export default function SearchMovie() {
       </label>
       <input
         id={inputId}
+        aria-busy={isPending}
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get("query") ?? ""}
         className="border p-2 w-full"
@@ -84,7 +89,7 @@ export default function SearchMovie() {
           ))}
         </ul>
       )}
-      {!isPending && movieList.length === 0 && (
+      {!isPending && movieList.length === 0 && initialQuery && (
         <p className="mt-4">No movies found.</p>
       )}
 
