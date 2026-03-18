@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Result } from "../types/types";
-import { Movie } from "./schema";
 
 export function cn(...inputs: Parameters<typeof clsx>) {
   return twMerge(clsx(inputs));
@@ -33,11 +32,9 @@ export function unwrapResult<T>(
 
 export function deduplicateIds<T extends { id: number }>(
   current: T[],
-  moviesToAppend: T[],
+  nextToAppend: T[],
 ): T[] {
   const prevIdList = new Set(current.map((movie) => movie.id));
-  const uniqueList = moviesToAppend.filter(
-    (movie) => !prevIdList.has(movie.id),
-  );
+  const uniqueList = nextToAppend.filter((movie) => !prevIdList.has(movie.id));
   return [...current, ...uniqueList];
 }
