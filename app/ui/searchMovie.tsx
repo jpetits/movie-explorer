@@ -1,12 +1,13 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useId, useState, useTransition } from "react";
+import { useEffect, useId, useState, useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { searchMovies } from "../lib/data";
 import { Movie } from "../types/types";
 import Link from "next/link";
 import { ROUTES } from "../routing/constants";
+import { cn } from "../lib/utils";
 
 export default function SearchMovie() {
   const searchParams = useSearchParams();
@@ -16,6 +17,17 @@ export default function SearchMovie() {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const inputId = useId();
+  const initialQuery = searchParams.get("query");
+
+  useEffect(() => {
+    if (initialQuery) {
+      startTransition(async () => {
+        const result = await searchMovies(initialQuery);
+        if (result.success) setMovieList(result.data);
+        else setError(result.error);
+      });
+    }
+  }, [initialQuery]);
 
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -23,6 +35,7 @@ export default function SearchMovie() {
       params.set("query", value);
     } else {
       params.delete("query");
+      setError(null);
     }
     replace(`${pathname}?${params.toString()}`);
 
@@ -50,16 +63,29 @@ export default function SearchMovie() {
         className="border p-2 w-full"
         placeholder="Search for a movie..."
       />
-      {!isPending && movieList.length > 0 && (
-        <ul className="mt-4">
+      {movieList.length > 0 && (
+        <ul
+          className={cn(
+            "mt-4",
+            "space-y-2",
+            isPending && "pointer-events-none opacity-50",
+          )}
+        >
           {movieList.map((movie) => (
             <li key={movie.id} className="border-b py-2">
               <Link href={ROUTES.detail(movie.id.toString())}>
-                {movie.title} ({new Date(movie.release_date).getFullYear()})
+                {movie.title} (
+                {movie.release_date
+                  ? new Date(movie.release_date).getFullYear()
+                  : "N/A"}
+                )
               </Link>
             </li>
           ))}
         </ul>
+      )}
+      {!isPending && movieList.length === 0 && (
+        <p className="mt-4">No movies found.</p>
       )}
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
