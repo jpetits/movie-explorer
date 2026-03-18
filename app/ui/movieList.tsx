@@ -24,6 +24,7 @@ export default function MovieList({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && page < totalPages) {
+          observer.disconnect();
           fetchPopularMovies(page + 1).then(({ results }) => {
             setMovieList((prev) => deduplicateIds(prev, results));
             setPage((p) => p + 1);
