@@ -1,5 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Result } from "../types/types";
+import { Movie } from "./schema";
 
 export function cn(...inputs: Parameters<typeof clsx>) {
   return twMerge(clsx(inputs));
@@ -17,4 +19,25 @@ export function formatDate(date: string) {
     month: "long",
     day: "numeric",
   }).format(new Date(date));
+}
+
+export function unwrapResult<T>(
+  result: Result<T> | null,
+  fallback: T,
+): { data: T; error: string | null } {
+  if (!result) return { data: fallback, error: null };
+  return result.success
+    ? { data: result.data, error: null }
+    : { data: fallback, error: result.error };
+}
+
+export function deduplicateMovies(
+  current: Movie[],
+  moviesToAppend: Movie[],
+): Movie[] {
+  const prevIdList = new Set(current.map((movie) => movie.id));
+  const uniqueList = moviesToAppend.filter(
+    (movie) => !prevIdList.has(movie.id),
+  );
+  return [...current, ...uniqueList];
 }

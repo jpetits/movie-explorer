@@ -7,7 +7,7 @@ import { ROUTES } from "../routing/constants";
 import { tmdbImageUrl } from "../lib/tmdb";
 import { Movie } from "../lib/schema";
 import { fetchPopularMovies } from "../lib/data";
-import { formatDate } from "@/app/lib/utils";
+import { deduplicateMovies, formatDate } from "@/app/lib/utils";
 
 export default function MovieList({
   initialMovieList,
@@ -25,13 +25,7 @@ export default function MovieList({
       ([entry]) => {
         if (entry.isIntersecting && page < totalPages) {
           fetchPopularMovies(page + 1).then(({ results, total_pages }) => {
-            setMovieList((prev) => {
-              const prevIdList = new Set(prev.map((movie) => movie.id));
-              const uniqueList = results.filter(
-                (movie) => !prevIdList.has(movie.id),
-              );
-              return [...prev, ...uniqueList];
-            });
+            setMovieList((prev) => deduplicateMovies(prev, results));
             setPage((p) => p + 1);
           });
         }

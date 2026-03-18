@@ -1,24 +1,26 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useId, useState, useTransition } from "react";
+import { useId, useState, useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { searchMovies } from "../lib/data";
 import { Movie } from "../lib/schema";
 import Link from "next/link";
 import { ROUTES } from "../routing/constants";
-import { cn } from "../lib/utils";
+import { cn, unwrapResult } from "../lib/utils";
 
 export default function SearchMovie({
-  movieList: initialMovieList,
+  initialMovies,
+  initialError,
 }: {
-  movieList: Movie[];
+  initialMovies: Movie[];
+  initialError: string | null;
 }) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
-  const [movieList, setMovieList] = useState<Movie[]>(initialMovieList);
-  const [error, setError] = useState<string | null>(null);
+  const [movieList, setMovieList] = useState<Movie[]>(initialMovies);
+  const [error, setError] = useState<string | null>(initialError);
   const [isPending, startTransition] = useTransition();
   const inputId = useId();
 
@@ -38,11 +40,12 @@ export default function SearchMovie({
         return;
       }
       const result = await searchMovies(value);
-      if (result.success) {
-        setMovieList(result.data);
+      const { data, error } = unwrapResult(result, []);
+      if (data) {
+        setMovieList(data);
         setError(null);
       } else {
-        setError(result.error);
+        setError(error);
         setMovieList([]);
       }
     });
