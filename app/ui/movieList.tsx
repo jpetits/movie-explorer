@@ -24,7 +24,13 @@ export default function MovieList({
       ([entry]) => {
         if (entry.isIntersecting && page < totalPages) {
           fetchPopularMovies(page + 1).then(({ results, total_pages }) => {
-            setMovieList((prev) => [...prev, ...results]);
+            setMovieList((prev) => {
+              const prevIdList = new Set(prev.map((movie) => movie.id));
+              const uniqueList = results.filter(
+                (movie) => !prevIdList.has(movie.id),
+              );
+              return [...prev, ...uniqueList];
+            });
             setPage((p) => p + 1);
           });
         }
