@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchMovie, similarMovies } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
-import Link from "next/link";
+import { formatDate } from "@/app/lib/utils";
 import { ROUTES } from "@/app/routing/constants";
 
 export default async function Detail({
@@ -27,7 +28,7 @@ export default async function Detail({
       <div className="p-6">
         <BackButton />
         <h2>{movie.title}</h2>
-        <p>Release Date: {movie.release_date}</p>
+        <p>Release Date: {formatDate(movie.release_date)}</p>
         <p>Rating: {movie.vote_average}</p>
         {movie.overview && <p>{movie.overview}</p>}
         {movie.tagline && <p className="italic">{movie.tagline}</p>}
@@ -61,7 +62,7 @@ export default async function Detail({
               {similarMovieList.map((similar) => (
                 <li key={similar.id}>
                   <Link href={ROUTES.detail(similar.id.toString())}>
-                    {similar.title} ({similar.release_date})
+                    {similar.title} ({formatDate(similar.release_date)})
                   </Link>
                 </li>
               ))}

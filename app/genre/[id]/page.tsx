@@ -5,6 +5,7 @@ import { searchMoviesByGenre } from "../../lib/data";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { notFound } from "next/navigation";
 import BackButton from "@/app/ui/backButton";
+import { formatDate } from "@/app/lib/utils";
 
 export default async function Genre({
   params,
@@ -21,7 +22,7 @@ export default async function Genre({
       {result.data.map((movie) => (
         <Link key={movie.id} href={ROUTES.detail(movie.id.toString())}>
           <h2>{movie.title}</h2>
-          <p>Release Date: {movie.release_date}</p>
+          <p>Release Date: {formatDate(movie.release_date)}</p>
           <p>Rating: {movie.vote_average}</p>
           {movie.poster_path && (
             <Image

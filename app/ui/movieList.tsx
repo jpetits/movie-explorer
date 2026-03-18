@@ -7,6 +7,7 @@ import { ROUTES } from "../routing/constants";
 import { tmdbImageUrl } from "../lib/tmdb";
 import { Movie } from "../lib/schema";
 import { fetchPopularMovies } from "../lib/data";
+import { formatDate } from "@/app/lib/utils";
 
 export default function MovieList({
   initialMovieList,
@@ -46,7 +47,7 @@ export default function MovieList({
       {movieList.map((movie) => (
         <Link key={movie.id} href={ROUTES.detail(movie.id.toString())}>
           <h2>{movie.title}</h2>
-          <p>Release Date: {movie.release_date}</p>
+          <p>Release Date: {formatDate(movie.release_date)}</p>
           <p>Rating: {movie.vote_average}</p>
           {movie.poster_path && (
             <Image

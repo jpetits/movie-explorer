@@ -43,5 +43,8 @@ export async function similarMovies(movieId: number): Promise<Result<Movie[]>> {
   return await getTmdb()
     .movies.similar(movieId)
     .then((data) => ({ success: true as const, data: data.results }))
-    .catch(() => ({ success: false as const, error: "Search failed" }));
+    .catch(() => ({
+      success: false as const,
+      error: "Failed to fetch similar movies",
+    }));
 }
