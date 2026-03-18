@@ -1,8 +1,11 @@
 "use server";
 
+import { z } from "zod";
 import { getTmdb } from "./tmdb";
 import { Result } from "../types/types";
 import { MovieSchema, Movie } from "./schema";
+
+const MovieListSchema = z.array(MovieSchema);
 
 export async function fetchPopularMovies(
   page = 1,
@@ -26,7 +29,10 @@ export async function fetchMovie(id: number): Promise<Result<Movie>> {
 export async function searchMovies(query: string): Promise<Result<Movie[]>> {
   return await getTmdb()
     .search.movies({ query })
-    .then((data) => ({ success: true as const, data: data.results }))
+    .then((data) => ({
+      success: true as const,
+      data: MovieListSchema.parse(data.results),
+    }))
     .catch(() => ({ success: false as const, error: "Search failed" }));
 }
 
@@ -35,14 +41,20 @@ export async function searchMoviesByGenre(
 ): Promise<Result<Movie[]>> {
   return await getTmdb()
     .discover.movie({ with_genres: genreId.toString() })
-    .then((data) => ({ success: true as const, data: data.results }))
+    .then((data) => ({
+      success: true as const,
+      data: MovieListSchema.parse(data.results),
+    }))
     .catch(() => ({ success: false as const, error: "Search failed" }));
 }
 
 export async function similarMovies(movieId: number): Promise<Result<Movie[]>> {
   return await getTmdb()
     .movies.similar(movieId)
-    .then((data) => ({ success: true as const, data: data.results }))
+    .then((data) => ({
+      success: true as const,
+      data: MovieListSchema.parse(data.results),
+    }))
     .catch(() => ({
       success: false as const,
       error: "Failed to fetch similar movies",
