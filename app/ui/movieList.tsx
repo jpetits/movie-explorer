@@ -27,11 +27,14 @@ export default function MovieList({
   return (
     <>
       {data.pages.map((page, pageIndex) => (
-        <span key={pageIndex}>
+        <div
+          key={pageIndex}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"
+        >
           {page.map((movie) => (
             <MovieTile key={movie.id} movie={movie} />
           ))}
-        </span>
+        </div>
       ))}
       <div ref={ref} />
       {isFetchingNextPage && <p>Loading...</p>}

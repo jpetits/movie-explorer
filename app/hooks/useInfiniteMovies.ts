@@ -25,6 +25,7 @@ export function useInfiniteMovies(
         pages: [initialMovieList],
         pageParams: [1],
       },
+      staleTime: Infinity,
     });
 
   useEffect(() => {

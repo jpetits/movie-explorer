@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchMovie, similarMovies } from "../../lib/data";
+import { fetchMovie, searchMoviesByGenre, similarMovies } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { formatDate } from "@/app/lib/utils";
 import { ROUTES } from "@/app/routing/constants";
+import MovieList from "@/app/ui/movieList";
 
 export default async function Detail({
   params,
@@ -19,10 +20,15 @@ export default async function Detail({
   }
   const [movie, resultSimilar] = await Promise.all([
     fetchMovie(movieId),
-    similarMovies(movieId),
+    similarMovies(movieId, 1),
   ]);
 
   const similarMovieList = resultSimilar.success ? resultSimilar.data : [];
+
+  async function fetchMore(page: number) {
+    "use server";
+    return similarMovies(movieId, page);
+  }
 
   return (
     <div className="p-6">
@@ -58,15 +64,10 @@ export default async function Detail({
       {similarMovieList.length > 0 && (
         <div className="mt-6">
           <h3>Similar Movies</h3>
-          <ul>
-            {similarMovieList.map((similar) => (
-              <li key={similar.id}>
-                <Link href={ROUTES.detail(similar.id.toString())}>
-                  {similar.title} ({formatDate(similar.release_date)})
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <MovieList
+            initialMovieList={similarMovieList}
+            fetchMore={fetchMore}
+          />
         </div>
       )}
     </div>

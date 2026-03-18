@@ -29,22 +29,31 @@ export async function searchMovies(
   );
 }
 
+export async function searchMoviesByGenre(
+  genreId: number,
+  page = 1,
+): Promise<Result<Movie[]>> {
+  return withResult(
+    getTmdb()
+      .discover.movie({ with_genres: genreId.toString(), page })
+      .then((data) => MovieListSchema.parse(data.results)),
+    "Failed to fetch movies by genre",
+  );
+}
+
 export async function fetchMovie(id: number): Promise<Movie> {
   return getTmdb()
     .movies.details(id)
     .then((data) => MovieSchema.parse(data));
 }
 
-export async function searchMoviesByGenre(genreId: number): Promise<Movie[]> {
-  return await getTmdb()
-    .discover.movie({ with_genres: genreId.toString() })
-    .then((data) => MovieListSchema.parse(data.results));
-}
-
-export async function similarMovies(movieId: number): Promise<Result<Movie[]>> {
+export async function similarMovies(
+  movieId: number,
+  page = 1,
+): Promise<Result<Movie[]>> {
   return withResult(
     getTmdb()
-      .movies.similar(movieId)
+      .movies.similar(movieId, { page })
       .then((data) => MovieListSchema.parse(data.results)),
     "Failed to fetch similar movies",
   );
