@@ -9,25 +9,18 @@ import Link from "next/link";
 import { ROUTES } from "../routing/constants";
 import { cn } from "../lib/utils";
 
-export default function SearchMovie() {
+export default function SearchMovie({
+  movieList: initialMovieList,
+}: {
+  movieList: Movie[];
+}) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
-  const [movieList, setMovieList] = useState<Movie[]>([]);
+  const [movieList, setMovieList] = useState<Movie[]>(initialMovieList);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const inputId = useId();
-  const initialQuery = searchParams.get("query");
-
-  useEffect(() => {
-    if (initialQuery) {
-      startTransition(async () => {
-        const result = await searchMovies(initialQuery);
-        if (result.success) setMovieList(result.data);
-        else setError(result.error);
-      });
-    }
-  }, [initialQuery]);
 
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -89,7 +82,7 @@ export default function SearchMovie() {
           ))}
         </ul>
       )}
-      {!isPending && movieList.length === 0 && initialQuery && (
+      {!isPending && movieList.length === 0 && (
         <p className="mt-4">No movies found.</p>
       )}
 
