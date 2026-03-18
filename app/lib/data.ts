@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { getTmdb } from "./tmdb";
 import { Result } from "../types/types";
-import { MovieSchema, Movie } from "./schema";
+import { MovieSchema, Movie, Genre, GenreSchema } from "./schema";
 import { withResult } from "./utils";
 
 const MovieListSchema = z.array(MovieSchema);
@@ -23,7 +23,7 @@ export async function fetchPopularMovies(
 }
 
 export async function fetchMovie(id: number): Promise<Movie> {
-  return await getTmdb()
+  return getTmdb()
     .movies.details(id)
     .then((data) => MovieSchema.parse(data));
 }
@@ -50,4 +50,16 @@ export async function similarMovies(movieId: number): Promise<Result<Movie[]>> {
       .then((data) => MovieListSchema.parse(data.results)),
     "Failed to fetch similar movies",
   );
+}
+
+export async function fetchGenre(id: number): Promise<Genre> {
+  return getTmdb()
+    .genres.movies()
+    .then((data) => {
+      const genre = data.genres.find((g) => g.id === id);
+      if (!genre) {
+        throw new Error("Genre not found");
+      }
+      return GenreSchema.parse(genre);
+    });
 }

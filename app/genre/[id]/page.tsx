@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/app/routing/constants";
-import { searchMoviesByGenre } from "../../lib/data";
+import { searchMoviesByGenre, fetchGenre } from "../../lib/data";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import BackButton from "@/app/ui/backButton";
 import { formatDate } from "@/app/lib/utils";
@@ -18,11 +18,15 @@ export default async function Genre({
     notFound();
   }
 
-  const result = await searchMoviesByGenre(genreId);
+  const [result, genre] = await Promise.all([
+    searchMoviesByGenre(genreId),
+    fetchGenre(genreId),
+  ]);
 
   return (
     <>
       <BackButton />
+      <h1 className="text-2xl font-bold mb-4">Movies in Genre {genre.name}</h1>
       {result.map((movie) => (
         <Link key={movie.id} href={ROUTES.detail(movie.id.toString())}>
           <h2>{movie.title}</h2>

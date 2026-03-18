@@ -34,8 +34,8 @@ export function deduplicateIds<T extends { id: number }>(
   current: T[],
   nextToAppend: T[],
 ): T[] {
-  const prevIdList = new Set(current.map((movie) => movie.id));
-  const uniqueList = nextToAppend.filter((movie) => !prevIdList.has(movie.id));
+  const prevIdList = new Set(current.map((item) => item.id));
+  const uniqueList = nextToAppend.filter((item) => !prevIdList.has(item.id));
   return [...current, ...uniqueList];
 }
 

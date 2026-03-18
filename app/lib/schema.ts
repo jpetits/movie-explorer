@@ -14,3 +14,10 @@ export const MovieSchema = z.object({
 });
 
 export type Movie = z.infer<typeof MovieSchema>;
+
+export const GenreSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type Genre = z.infer<typeof GenreSchema>;
