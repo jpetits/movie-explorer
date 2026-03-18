@@ -12,9 +12,11 @@ import { cn, unwrapResult } from "../lib/utils";
 export default function SearchMovie({
   initialMovies,
   initialError,
+  searchQuery,
 }: {
   initialMovies: Movie[];
   initialError: string | null;
+  searchQuery: string | undefined;
 }) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -60,7 +62,7 @@ export default function SearchMovie({
         id={inputId}
         aria-busy={isPending}
         onChange={(e) => handleSearch(e.target.value)}
-        defaultValue={searchParams.get("query") ?? ""}
+        defaultValue={searchQuery ?? ""}
         className="border p-2 w-full"
         placeholder="Search for a movie..."
       />

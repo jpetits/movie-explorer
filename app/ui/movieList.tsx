@@ -7,7 +7,7 @@ import { ROUTES } from "../routing/constants";
 import { tmdbImageUrl } from "../lib/tmdb";
 import { Movie } from "../lib/schema";
 import { fetchPopularMovies } from "../lib/data";
-import { deduplicateMovies, formatDate } from "@/app/lib/utils";
+import { deduplicateIds, formatDate } from "@/app/lib/utils";
 
 export default function MovieList({
   initialMovieList,
@@ -24,8 +24,8 @@ export default function MovieList({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && page < totalPages) {
-          fetchPopularMovies(page + 1).then(({ results, total_pages }) => {
-            setMovieList((prev) => deduplicateMovies(prev, results));
+          fetchPopularMovies(page + 1).then(({ results }) => {
+            setMovieList((prev) => deduplicateIds(prev, results));
             setPage((p) => p + 1);
           });
         }

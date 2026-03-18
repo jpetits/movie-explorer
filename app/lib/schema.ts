@@ -3,17 +3,11 @@ import { z } from "zod";
 export const MovieSchema = z.object({
   id: z.number(),
   title: z.string(),
-  release_date: z.string(),
+  release_date: z.string().optional(),
   vote_average: z.number(),
-  poster_path: z
-    .string()
-    .nullable()
-    .transform((v) => v ?? undefined),
+  poster_path: z.string().nullable(),
   overview: z.string().optional(),
-  backdrop_path: z
-    .string()
-    .nullable()
-    .transform((v) => v ?? undefined),
+  backdrop_path: z.string().nullable(),
   genres: z.array(z.object({ id: z.number(), name: z.string() })).optional(),
   runtime: z.number().optional(),
   tagline: z.string().optional(),

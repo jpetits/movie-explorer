@@ -12,7 +12,7 @@ export function formatYear(date: string) {
   return new Date(date).getFullYear();
 }
 
-export function formatDate(date: string) {
+export function formatDate(date: string | undefined) {
   if (!date) return "TBA";
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
@@ -31,10 +31,10 @@ export function unwrapResult<T>(
     : { data: fallback, error: result.error };
 }
 
-export function deduplicateMovies(
-  current: Movie[],
-  moviesToAppend: Movie[],
-): Movie[] {
+export function deduplicateIds<T extends { id: number }>(
+  current: T[],
+  moviesToAppend: T[],
+): T[] {
   const prevIdList = new Set(current.map((movie) => movie.id));
   const uniqueList = moviesToAppend.filter(
     (movie) => !prevIdList.has(movie.id),
