@@ -1,7 +1,8 @@
 "use server";
 
 import { getTmdb } from "./tmdb";
-import { Movie, Result } from "../types/types";
+import { Result } from "../types/types";
+import { MovieSchema, Movie } from "../db/schema";
 
 export async function fetchPopularMovies(
   page = 1,
@@ -17,18 +18,7 @@ export async function fetchMovie(id: number): Promise<Result<Movie>> {
     .movies.details(id)
     .then((data) => ({
       success: true as const,
-      data: {
-        id: data.id,
-        title: data.title,
-        release_date: data.release_date,
-        vote_average: data.vote_average,
-        poster_path: data.poster_path,
-        overview: data.overview,
-        backdrop_path: data.backdrop_path,
-        genres: data.genres,
-        runtime: data.runtime,
-        tagline: data.tagline,
-      },
+      data: MovieSchema.parse(data),
     }))
     .catch(() => ({ success: false as const, error: "Failed to fetch movie" }));
 }

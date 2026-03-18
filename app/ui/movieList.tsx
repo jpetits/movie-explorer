@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ROUTES } from "../routing/constants";
 import { tmdbImageUrl } from "../lib/tmdb";
-import { Movie } from "../types/types";
+import { Movie } from "../db/schema";
 import { fetchPopularMovies } from "../lib/data";
 
 export default function MovieList({

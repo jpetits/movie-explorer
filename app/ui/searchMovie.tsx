@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useState, useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { searchMovies } from "../lib/data";
-import { Movie } from "../types/types";
+import { Movie } from "../db/schema";
 import Link from "next/link";
 import { ROUTES } from "../routing/constants";
 import { cn } from "../lib/utils";
