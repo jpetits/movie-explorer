@@ -43,7 +43,7 @@ export default function SearchMovie({
       }
       const result = await searchMovies(value);
       const { data, error } = unwrapResult(result, []);
-      if (data) {
+      if (!error) {
         setMovieList(data);
         setError(null);
       } else {
@@ -87,7 +87,7 @@ export default function SearchMovie({
           ))}
         </ul>
       )}
-      {!isPending && movieList.length === 0 && (
+      {!isPending && movieList.length === 0 && searchQuery && (
         <p className="mt-4">No movies found.</p>
       )}
 
