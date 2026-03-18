@@ -20,7 +20,7 @@ export default function MovieList({
 }) {
   const [movieList, setMovieList] = useState(initialMovieList);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(initialError || null);
+  const [error, setError] = useState<string | null>(initialError ?? null);
   const [page, setPage] = useState(1);
   const ref = useRef<HTMLDivElement>(null);
 
