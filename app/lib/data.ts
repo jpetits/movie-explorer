@@ -12,7 +12,7 @@ export async function fetchPopularMovies(
 ): Promise<{ results: Movie[]; total_pages: number }> {
   return await getTmdb()
     .movies.popular({ page })
-    .then((data) => ({ results: data.results, total_pages: data.total_pages }))
+    .then((data) => ({ results: MovieListSchema.parse(data.results), total_pages: data.total_pages }))
     .catch(() => ({ results: [], total_pages: 0 }));
 }
 
