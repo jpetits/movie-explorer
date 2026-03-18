@@ -7,7 +7,7 @@ import { searchMovies } from "../lib/data";
 import { Movie } from "../lib/schema";
 import Link from "next/link";
 import { ROUTES } from "../routing/constants";
-import { cn, unwrapResult } from "../lib/utils";
+import { cn, formatDate, unwrapResult } from "../lib/utils";
 
 export default function SearchMovie({
   initialMovies,
@@ -77,11 +77,7 @@ export default function SearchMovie({
           {movieList.map((movie) => (
             <li key={movie.id} className="border-b py-2">
               <Link href={ROUTES.detail(movie.id.toString())}>
-                {movie.title} (
-                {movie.release_date
-                  ? new Date(movie.release_date).getFullYear()
-                  : "N/A"}
-                )
+                {movie.title} ({formatDate(movie.release_date)}
               </Link>
             </li>
           ))}
