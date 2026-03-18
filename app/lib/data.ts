@@ -2,7 +2,7 @@
 
 import { getTmdb } from "./tmdb";
 import { Result } from "../types/types";
-import { MovieSchema, Movie } from "../db/schema";
+import { MovieSchema, Movie } from "./schema";
 
 export async function fetchPopularMovies(
   page = 1,
