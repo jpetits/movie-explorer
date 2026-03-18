@@ -1,7 +1,7 @@
 "use server";
 
 import { getTmdb } from "./tmdb";
-import { Movie } from "../types/types";
+import { Movie, Result } from "../types/types";
 
 export async function fetchPopularMovies(
   page = 1,
@@ -30,11 +30,11 @@ export async function fetchMovie(id: number): Promise<Movie | null> {
     .catch(() => null);
 }
 
-export async function searchMovies(query: string): Promise<Movie[]> {
+export async function searchMovies(query: string): Promise<Result<Movie[]>> {
   return await getTmdb()
     .search.movies({ query })
-    .then((data) => data.results)
-    .catch(() => []);
+    .then((data) => ({ success: true as const, data: data.results }))
+    .catch(() => ({ success: false as const, error: "Search failed" }));
 }
 
 export async function searchMoviesByGenre(genreId: number): Promise<Movie[]> {
