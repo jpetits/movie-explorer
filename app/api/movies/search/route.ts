@@ -1,6 +1,6 @@
 import { searchMovies } from "@/app/lib/data";
 
-export const revalidate = 100;
+export const revalidate = 600;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

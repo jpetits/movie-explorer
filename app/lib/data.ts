@@ -1,5 +1,6 @@
 "use server";
 
+import { cache } from "react";
 import { z } from "zod";
 import { getTmdb } from "./tmdb";
 import { MovieSchema, Movie, Genre, GenreSchema } from "./schema";
@@ -28,11 +29,12 @@ export async function fetchMoviesByGenre(
     .then((data) => MovieListSchema.parse(data.results));
 }
 
-export async function fetchMovie(id: number): Promise<Movie> {
+export const fetchMovie = cache(async (id: number): Promise<Movie> => {
+  console.log("fetchMovie called", id);
   return getTmdb()
     .movies.details(id)
     .then((data) => MovieSchema.parse(data));
-}
+});
 
 export async function fetchSimilarMovies(
   movieId: number,
@@ -43,7 +45,7 @@ export async function fetchSimilarMovies(
     .then((data) => MovieListSchema.parse(data.results));
 }
 
-export async function fetchGenre(id: number): Promise<Genre> {
+export const fetchGenre = cache(async (id: number): Promise<Genre> => {
   return getTmdb()
     .genres.movies()
     .then((data) => {
@@ -51,4 +53,4 @@ export async function fetchGenre(id: number): Promise<Genre> {
       if (!genre) notFound();
       return GenreSchema.parse(genre);
     });
-}
+});

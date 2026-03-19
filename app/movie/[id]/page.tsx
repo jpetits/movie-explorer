@@ -8,6 +8,24 @@ import { formatDate } from "@/app/lib/utils";
 import { ROUTES } from "@/app/routing/constants";
 import MovieList from "@/app/ui/movieList";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const movie = await fetchMovie(Number(id));
+  return {
+    title: movie.title,
+    description: movie.overview,
+    openGraph: {
+      title: movie.title,
+      description: movie.overview,
+      images: movie.poster_path ? [`${tmdbImageUrl}${movie.poster_path}`] : [],
+    },
+  };
+}
+
 export default async function Movie({
   params,
 }: {

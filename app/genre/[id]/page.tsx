@@ -4,6 +4,19 @@ import { notFound } from "next/navigation";
 import MovieList from "@/app/ui/movieList";
 import { ROUTES } from "@/app/routing/constants";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const genre = await fetchGenre(Number(id));
+  return {
+    title: `${genre.name} Movies`,
+    description: `Browse all ${genre.name} movies`,
+  };
+}
+
 export default async function Genre({
   params,
 }: {
