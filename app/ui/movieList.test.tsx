@@ -84,4 +84,26 @@ describe("MovieList", () => {
     ]);
     expect(await screen.findByText(/the dark knight/i)).toBeInTheDocument();
   });
+
+  it("shows error when fetch fails", async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+    });
+
+    render(
+      <MovieList initialMovieList={[]} fetchMorePath="/api/movies/popular" />,
+      { wrapper: createWrapper() },
+    );
+
+    expect(await screen.findByText(/No movies found./i)).toBeInTheDocument();
+  });
+
+  it("shows no movies found message when list is empty", async () => {
+    render(
+      <MovieList initialMovieList={[]} fetchMorePath="/api/movies/popular" />,
+      { wrapper: createWrapper() },
+    );
+
+    expect(await screen.findByText(/No movies found./i)).toBeInTheDocument();
+  });
 });
