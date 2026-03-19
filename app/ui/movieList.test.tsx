@@ -77,13 +77,13 @@ describe("MovieList", () => {
         },
       ],
     });
-
-    const movieTitle = await screen.findByText(/inception/i);
-    expect(movieTitle).toBeInTheDocument();
+    expect(await screen.findByText(/inception/i)).toBeInTheDocument();
+    expect(screen.queryByText(/the dark knight/i)).not.toBeInTheDocument();
 
     triggerIntersection!([
       { isIntersecting: true } as IntersectionObserverEntry,
     ]);
+    expect(await screen.findByText(/the dark knight/i)).toBeInTheDocument();
 
     expect(fetchPopularMovies).toHaveBeenCalledWith(2);
   });

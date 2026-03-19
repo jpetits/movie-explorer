@@ -16,7 +16,7 @@ export default function SearchMovie({
   searchMovies: (query: string, page: number) => Promise<Result<Movie[]>>;
 }) {
   return (
-    <div className="p-6">
+    <div className="mt-6">
       {searchQuery && (
         <MovieList
           initialMovieList={initialMovieList}

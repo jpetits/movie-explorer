@@ -1,14 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchMovie, searchMoviesByGenre, similarMovies } from "../../lib/data";
+import { fetchMovie, similarMovies } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { formatDate } from "@/app/lib/utils";
 import { ROUTES } from "@/app/routing/constants";
 import MovieList from "@/app/ui/movieList";
 
-export default async function Detail({
+export default async function Movie({
   params,
 }: {
   params: Promise<{ id: string }>;

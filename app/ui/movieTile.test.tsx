@@ -46,7 +46,7 @@ describe("MovieTile", () => {
     expect(screen.getByText("8.8")).toBeInTheDocument();
     expect(screen.getByText("No Image")).toBeInTheDocument();
     const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "/detail/1");
+    expect(link).toHaveAttribute("href", "/movie/1");
   });
 
   it("handles image error", () => {
@@ -67,6 +67,6 @@ describe("MovieTile", () => {
 
     expect(screen.getByText("No Image")).toBeInTheDocument();
     const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "/detail/1");
+    expect(link).toHaveAttribute("href", "/movie/1");
   });
 });

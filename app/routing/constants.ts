@@ -1,7 +1,7 @@
 export const ROUTES = {
   home: "/",
   list: "/list",
-  detail: (id: string) => `/detail/${id}`,
+  movie: (id: string) => `/movie/${id}`,
   genre: (id: string) => `/genre/${id}`,
   search: "/search",
 };

@@ -15,7 +15,7 @@ export function MovieListSkeleton() {
   );
 }
 
-export function MovieDetailSkeleton() {
+export function MovieSkeleton() {
   return (
     <div className="flex items-center space-x-4 animate-pulse p-6">
       <div className="w-48 h-72 bg-gray-300 rounded"></div>
