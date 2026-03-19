@@ -28,8 +28,12 @@ export default function MovieList({
           key={pageIndex}
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"
         >
-          {page.map((movie: Movie) => (
-            <MovieTile key={movie.id} movie={movie} />
+          {page.map((movie: Movie, index: number) => (
+            <MovieTile
+              key={movie.id}
+              movie={movie}
+              priority={pageIndex === 0 && index < 6}
+            />
           ))}
         </div>
       ))}

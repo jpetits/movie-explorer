@@ -7,7 +7,13 @@ import { formatDate } from "../../lib/utils";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { StarIcon } from "@heroicons/react/24/outline";
 
-export default function MovieTile({ movie }: { movie: Movie }) {
+export default function MovieTile({
+  movie,
+  priority,
+}: {
+  movie: Movie;
+  priority?: boolean;
+}) {
   const { title, release_date, poster_path } = movie;
   const [imgError, setImgError] = useState(false);
 
@@ -27,6 +33,8 @@ export default function MovieTile({ movie }: { movie: Movie }) {
             className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-lg"
             alt={title}
             onError={() => setImgError(true)}
+            priority={priority}
+            loading={priority ? "eager" : "lazy"}
           />
         ) : (
           <div className="h-full bg-zinc-800 flex items-center justify-center hover:scale-105 transition-transform">
