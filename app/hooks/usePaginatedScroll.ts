@@ -2,8 +2,8 @@ import { Movie } from "../lib/schema";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export function useInfiniteMovies(
-  initialMovieList: Movie[],
+export function usePaginatedScroll<T>(
+  initialMovieList: T[],
   fetchMorePath: string,
   ref: React.RefObject<HTMLDivElement | null>,
 ) {

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Movie } from "../lib/schema";
 import MovieTile from "./movieTile";
-import { useInfiniteMovies } from "../hooks/useInfiniteMovies";
+import { usePaginatedScroll } from "../hooks/usePaginatedScroll";
 
 export default function MovieList({
   initialMovieList,
@@ -14,7 +14,7 @@ export default function MovieList({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { data, isFetchingNextPage, error } = useInfiniteMovies(
+  const { data, isFetchingNextPage, error } = usePaginatedScroll<Movie>(
     initialMovieList,
     fetchMorePath,
     ref,
