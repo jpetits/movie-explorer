@@ -1,5 +1,5 @@
 "use client";
-import ArrowLeftIcon from "@heroicons/react/24/solid/esm/ArrowLeftIcon";
+import ArrowLeftIcon from "@heroicons/react/24/outline/ArrowLeftIcon";
 import { useRouter } from "next/navigation";
 
 export default function BackButton() {

@@ -67,6 +67,6 @@ describe("Search", () => {
     });
 
     act(() => jest.advanceTimersByTime(500));
-    expect(mockReplace).toHaveBeenCalledWith("/search");
+    expect(mockReplace).toHaveBeenCalledWith("/search?");
   });
 });
