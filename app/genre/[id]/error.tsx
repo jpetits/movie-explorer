@@ -1,7 +1,7 @@
 "use client";
 
 import { ROUTES } from "@/app/routing/constants";
-import Link from "next/dist/client/link";
+import Link from "next/link";
 
 export default function Error() {
   return (
