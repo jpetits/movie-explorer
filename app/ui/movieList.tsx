@@ -27,18 +27,13 @@ export default function MovieList({
           key={pageIndex}
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"
         >
-          {page.map((movie) => (
+          {page.map((movie: Movie) => (
             <MovieTile key={movie.id} movie={movie} />
           ))}
         </div>
       ))}
       <div ref={ref} />
       {isFetchingNextPage && !error && <p>Loading...</p>}
-      {/* {error instanceof Error && (
-        <p className="text-red-500">
-          {error.name}: {error.message}
-        </p>
-      )} */}
       {!isFetchingNextPage && data.pages[0].length === 0 && (
         <p className="mt-4">No movies found.</p>
       )}
