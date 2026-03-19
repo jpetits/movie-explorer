@@ -26,4 +26,4 @@ jobs:
 
         - run: pnpm typecheck
 
-        - run: pnpm test -- --ci --passWithNoTests
+        - run: pnpm test

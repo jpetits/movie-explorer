@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SearchMovie from "./searchMovie";
 
@@ -28,7 +28,7 @@ jest.mock("next/navigation", () => ({
 const mockObserve = jest.fn();
 const mockDisconnect = jest.fn();
 
-global.IntersectionObserver = jest.fn().mockImplementation((callback) => ({
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   observe: mockObserve,
   disconnect: mockDisconnect,
   unobserve: jest.fn(),
@@ -59,7 +59,7 @@ describe("SearchMovie", () => {
       <SearchMovie
         initialMovieList={[]}
         searchQuery=""
-        fetchMorePath="/search?query="
+        fetchMorePath="/search"
       />,
       { wrapper: createWrapper() },
     );
