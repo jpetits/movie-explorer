@@ -52,6 +52,7 @@ export default async function Movie({
                 src={`${tmdbImageUrl}${movie.poster_path}`}
                 alt={movie.title}
                 fill
+                priority
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 256px"
               />
