@@ -29,7 +29,7 @@ export async function searchMovies(
   );
 }
 
-export async function searchMoviesByGenre(
+export async function fetchMoviesByGenre(
   genreId: number,
   page = 1,
 ): Promise<Result<Movie[]>> {
@@ -47,7 +47,7 @@ export async function fetchMovie(id: number): Promise<Movie> {
     .then((data) => MovieSchema.parse(data));
 }
 
-export async function similarMovies(
+export async function fetchSimilarMovies(
   movieId: number,
   page = 1,
 ): Promise<Result<Movie[]>> {

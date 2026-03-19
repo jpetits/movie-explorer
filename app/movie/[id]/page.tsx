@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchMovie, similarMovies } from "../../lib/data";
+import { fetchMovie, fetchSimilarMovies } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { formatDate } from "@/app/lib/utils";
@@ -20,12 +20,12 @@ export default async function Movie({
   }
   const [movie, resultSimilar] = await Promise.all([
     fetchMovie(movieId),
-    similarMovies(movieId, 1),
+    fetchSimilarMovies(movieId, 1),
   ]);
 
   const similarMovieList = resultSimilar.success ? resultSimilar.data : [];
 
-  const similarMoviesWithMovieId = similarMovies.bind(null, movieId);
+  const fetchSimilarMoviesWithMovieId = fetchSimilarMovies.bind(null, movieId);
 
   return (
     <div className="p-6">
@@ -63,7 +63,7 @@ export default async function Movie({
           <h3>Similar Movies</h3>
           <MovieList
             initialMovieList={similarMovieList}
-            fetchMore={similarMoviesWithMovieId}
+            fetchMore={fetchSimilarMoviesWithMovieId}
           />
         </div>
       )}

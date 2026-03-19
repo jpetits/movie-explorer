@@ -1,4 +1,4 @@
-import { searchMoviesByGenre, fetchGenre } from "../../lib/data";
+import { fetchMoviesByGenre, fetchGenre } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { unwrapResult } from "@/app/lib/utils";
 import { notFound } from "next/navigation";
@@ -16,14 +16,11 @@ export default async function Genre({
   }
 
   const [result, genre] = await Promise.all([
-    unwrapResult(await searchMoviesByGenre(genreId, 1), []),
+    unwrapResult(await fetchMoviesByGenre(genreId, 1), []),
     fetchGenre(genreId),
   ]);
 
-  const searchMoviesByGenreWithGenreId = searchMoviesByGenre.bind(
-    null,
-    genreId,
-  );
+  const fetchMoviesByGenreWithGenreId = fetchMoviesByGenre.bind(null, genreId);
 
   return (
     <>
@@ -32,7 +29,7 @@ export default async function Genre({
 
       <MovieList
         initialMovieList={result.data}
-        fetchMore={searchMoviesByGenreWithGenreId}
+        fetchMore={fetchMoviesByGenreWithGenreId}
         error={result.error}
       />
     </>
