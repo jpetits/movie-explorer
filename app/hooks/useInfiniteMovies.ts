@@ -9,7 +9,7 @@ export function useInfiniteMovies(
 ) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
     useInfiniteQuery({
-      queryKey: ["movies" + fetchMorePath],
+      queryKey: ["movies", fetchMorePath],
       queryFn: async ({ pageParam }) => {
         const url = new URL(fetchMorePath, window.location.origin);
         url.searchParams.set("page", String(pageParam));
