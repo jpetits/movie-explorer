@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import { Movie } from "../lib/schema";
+import { Movie } from "../../lib/schema";
 import MovieTile from "./movieTile";
-import { usePaginatedScroll } from "../hooks/usePaginatedScroll";
+import { usePaginatedScroll } from "../../hooks/usePaginatedScroll";
+import { MovieListSkeleton } from "../skeletons";
 
 export default function MovieList({
   initialMovieList,
@@ -21,7 +22,7 @@ export default function MovieList({
   );
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
       {data.pages.map((page, pageIndex) => (
         <div
           key={pageIndex}
@@ -33,10 +34,10 @@ export default function MovieList({
         </div>
       ))}
       <div ref={ref} />
-      {isFetchingNextPage && !error && <p>Loading...</p>}
+      {isFetchingNextPage && !error && <MovieListSkeleton />}
       {!isFetchingNextPage && data.pages[0].length === 0 && (
-        <p className="mt-4">No movies found.</p>
+        <p className="mt-12 text-center text-zinc-400">No movies found.</p>
       )}
-    </>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Movie } from "../lib/schema";
+import { Movie } from "../../lib/schema";
 import MovieList from "./movieList";
 
 export default function SearchMovie({

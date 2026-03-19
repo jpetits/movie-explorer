@@ -1,6 +1,6 @@
-import SearchMovie from "@/app/ui/searchMovie";
+import SearchMovie from "@/app/ui/movies/searchMovie";
 import { searchMovies } from "../lib/data";
-import SearchInput from "@/app/ui/search";
+import SearchInput from "@/app/ui/movies/search";
 import { Suspense } from "react";
 import { SearchSkeleton } from "../ui/skeletons";
 import { ROUTES } from "../routing/constants";

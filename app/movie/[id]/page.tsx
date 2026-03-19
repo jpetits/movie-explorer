@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchMovie, fetchSimilarMovies } from "../../lib/data";
-import BackButton from "@/app/ui/backButton";
+import BackButton from "@/app/ui/dashboard/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { formatDate } from "@/app/lib/utils";
 import { ROUTES } from "@/app/routing/constants";
-import MovieList from "@/app/ui/movieList";
+import MovieList from "@/app/ui/movies/movieList";
 
 export async function generateMetadata({
   params,
@@ -42,39 +42,62 @@ export default async function Movie({
   ]);
 
   return (
-    <div className="p-6">
+    <div>
       <BackButton />
-      <h2>{movie.title}</h2>
-      <p>Release Date: {formatDate(movie.release_date)}</p>
-      <p>Rating: {movie.vote_average}</p>
-      {movie.overview && <p>{movie.overview}</p>}
-      {movie.tagline && <p className="italic">{movie.tagline}</p>}
-      {movie.genres && (
-        <p>
-          Genres:{" "}
-          {movie.genres.map((genre) => (
-            <Link
-              key={genre.id}
-              href={ROUTES.genre(genre.id.toString())}
-              className="mr-2"
-            >
-              {genre.name}
-            </Link>
-          ))}
-        </p>
-      )}
-      {movie.runtime && <p>Runtime: {movie.runtime} minutes</p>}
-      {movie.poster_path && (
-        <Image
-          src={`${tmdbImageUrl}${movie.poster_path}`}
-          alt={movie.title}
-          width={500}
-          height={750}
-        />
-      )}
+      <div className="flex flex-col md:flex-row gap-8">
+        {movie.poster_path && (
+          <div className="w-full md:w-64 shrink-0">
+            <div className="aspect-[2/3] relative rounded-lg overflow-hidden">
+              <Image
+                src={`${tmdbImageUrl}${movie.poster_path}`}
+                alt={movie.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 256px"
+              />
+            </div>
+          </div>
+        )}
+        <div className="flex flex-col gap-3">
+          <h1 className="text-3xl font-bold text-zinc-10">{movie.title}</h1>
+          <div className="flex gap-4 text-sm text-zinc-400">
+            <span>{formatDate(movie.release_date)}</span>
+            {movie.runtime && (
+              <span>
+                {movie.runtime}
+                min
+              </span>
+            )}
+            <span className="text-yellow-400 font-medium">
+              ★ {Number(movie.vote_average).toFixed(1)}
+            </span>
+          </div>
+          {movie.overview && (
+            <p className="text-zinc-300 leading-relaxed max-w-2xl">
+              {movie.overview}
+            </p>
+          )}
+          {movie.tagline && (
+            <p className="text-zinc-400 italic">{movie.tagline}</p>
+          )}
+          <div className="flex flex-wrap gap-2">
+            {movie.genres?.map((genre) => (
+              <Link
+                key={genre.id}
+                href={ROUTES.genre(genre.id.toString())}
+                className="px-3 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs hover:bg-zinc-700 transition-colors"
+              >
+                {genre.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
       {similarMovieList.length > 0 && (
-        <div className="mt-6">
-          <h3>Similar Movies</h3>
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold text-zinc-100 mb-4">
+            Similar Movies
+          </h2>
           <MovieList
             initialMovieList={similarMovieList}
             fetchMorePath={ROUTES.api.similarMovies(movieId.toString())}

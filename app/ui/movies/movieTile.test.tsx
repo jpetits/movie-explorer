@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import MovieTile from "./movieTile";
-import { formatDate } from "../lib/utils";
+import { formatDate } from "../../lib/utils";
 
 jest.mock("next/navigation", () => ({
   useSearchParams: jest.fn(),

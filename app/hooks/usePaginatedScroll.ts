@@ -1,4 +1,3 @@
-import { Movie } from "../lib/schema";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 

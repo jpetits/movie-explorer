@@ -1,7 +1,7 @@
 import { fetchMoviesByGenre, fetchGenre } from "../../lib/data";
-import BackButton from "@/app/ui/backButton";
+import BackButton from "@/app/ui/dashboard/backButton";
 import { notFound } from "next/navigation";
-import MovieList from "@/app/ui/movieList";
+import MovieList from "@/app/ui/movies/movieList";
 import { ROUTES } from "@/app/routing/constants";
 
 export async function generateMetadata({
@@ -36,8 +36,9 @@ export default async function Genre({
   return (
     <>
       <BackButton />
-      <h1 className="text-2xl font-bold mb-4">Movies in Genre {genre.name}</h1>
-
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-zinc-100">{genre.name}</h1>
+      </div>
       <MovieList
         initialMovieList={result}
         fetchMorePath={ROUTES.api.moviesByGenre(genreId.toString())}

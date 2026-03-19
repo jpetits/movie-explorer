@@ -1,16 +1,7 @@
-import { ROUTES } from "@/app/routing/constants";
-import Link from "next/link";
+import NotFoundDisplay from "@/app/ui/not-found";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4">
-      <h2 className="text-2xl font-semibold">Genre not found</h2>
-      <p className="text-zinc-500">
-        {"The genre you're looking for doesn't exist."}
-      </p>
-      <Link href={ROUTES.list} className="text-sm underline underline-offset-4">
-        Back to list
-      </Link>
-    </div>
+    <NotFoundDisplay message={"The genre you're looking for doesn't exist."} />
   );
 }
