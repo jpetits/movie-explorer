@@ -1,23 +1,16 @@
 import { Movie } from "../lib/schema";
-import { Result } from "../types/types";
 import { useEffect } from "react";
-import { unwrapResult } from "../lib/utils";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export function useInfiniteMovies(
   initialMovieList: Movie[],
-  fetchMore: (page: number) => Promise<Result<Movie[]>>,
+  fetchMore: (page: number) => Promise<Movie[]>,
   ref: React.RefObject<HTMLDivElement | null>,
 ) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
     useInfiniteQuery({
       queryKey: ["movies"],
-      queryFn: async ({ pageParam }) => {
-        const result = await fetchMore(pageParam);
-        const { data, error } = unwrapResult(result, []);
-        if (error) throw new Error(error);
-        return data;
-      },
+      queryFn: async ({ pageParam }) => await fetchMore(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage, _, lastPageParam) =>
         lastPage.length > 0 ? lastPageParam + 1 : undefined,
@@ -31,7 +24,12 @@ export function useInfiniteMovies(
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        if (
+          entry.isIntersecting &&
+          hasNextPage &&
+          !isFetchingNextPage &&
+          !error
+        ) {
           observer.disconnect();
           fetchNextPage();
         }
@@ -40,7 +38,7 @@ export function useInfiniteMovies(
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, ref]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, error, ref]);
 
-  return { data, hasNextPage, isFetchingNextPage };
+  return { data, hasNextPage, isFetchingNextPage, error };
 }

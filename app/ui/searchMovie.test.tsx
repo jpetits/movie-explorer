@@ -13,7 +13,6 @@ describe("SearchMovie", () => {
     render(
       <SearchMovie
         initialMovieList={[]}
-        initialError={null}
         searchQuery="Inception"
         searchMovies={mockSearchMovies}
       />,
@@ -27,26 +26,11 @@ describe("SearchMovie", () => {
     render(
       <SearchMovie
         initialMovieList={[]}
-        initialError={null}
         searchQuery=""
         searchMovies={mockSearchMovies}
       />,
     );
 
     expect(screen.queryByText("No movies found.")).not.toBeInTheDocument();
-  });
-
-  it("displays error message when initialError is provided", () => {
-    const mockSearchMovies = jest.fn();
-    render(
-      <SearchMovie
-        initialMovieList={[]}
-        initialError="An error occurred"
-        searchQuery="Inception"
-        searchMovies={mockSearchMovies}
-      />,
-    );
-
-    expect(screen.getByText("An error occurred")).toBeInTheDocument();
   });
 });

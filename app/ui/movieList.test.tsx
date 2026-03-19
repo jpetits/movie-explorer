@@ -60,7 +60,6 @@ describe("MovieList", () => {
             vote_average: 8.8,
           },
         ]}
-        error={null}
         fetchMore={fetchPopularMovies}
       />,
       { wrapper: createWrapper() },

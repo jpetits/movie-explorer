@@ -1,6 +1,5 @@
 import SearchMovie from "@/app/ui/searchMovie";
 import { searchMovies } from "../lib/data";
-import { unwrapResult } from "../lib/utils";
 import SearchInput from "@/app/ui/search";
 import { Suspense } from "react";
 import { SearchSkeleton } from "../ui/skeletons";
@@ -13,7 +12,7 @@ export default async function Search({
   const { query } = await searchParams;
 
   const queryString = query ?? "";
-  const { data, error } = unwrapResult(await searchMovies(queryString, 1), []);
+  const data = await searchMovies(queryString, 1);
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Search Movies</h1>
@@ -21,7 +20,6 @@ export default async function Search({
       <Suspense key={query} fallback={<SearchSkeleton />}>
         <SearchMovie
           initialMovieList={data}
-          initialError={error}
           searchQuery={queryString}
           searchMovies={searchMovies}
         />

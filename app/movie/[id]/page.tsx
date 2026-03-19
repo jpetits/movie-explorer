@@ -18,12 +18,10 @@ export default async function Movie({
   if (!movieId) {
     notFound();
   }
-  const [movie, resultSimilar] = await Promise.all([
+  const [movie, similarMovieList] = await Promise.all([
     fetchMovie(movieId),
     fetchSimilarMovies(movieId, 1),
   ]);
-
-  const similarMovieList = resultSimilar.success ? resultSimilar.data : [];
 
   const fetchSimilarMoviesWithMovieId = fetchSimilarMovies.bind(null, movieId);
 
