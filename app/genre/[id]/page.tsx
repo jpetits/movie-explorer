@@ -1,10 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ROUTES } from "@/app/routing/constants";
 import { searchMoviesByGenre, fetchGenre } from "../../lib/data";
-import { tmdbImageUrl } from "../../lib/tmdb";
 import BackButton from "@/app/ui/backButton";
-import { formatDate, unwrapResult } from "@/app/lib/utils";
+import { unwrapResult } from "@/app/lib/utils";
 import { notFound } from "next/navigation";
 import MovieList from "@/app/ui/movieList";
 
@@ -24,10 +20,10 @@ export default async function Genre({
     fetchGenre(genreId),
   ]);
 
-  async function fetchMore(page: number) {
-    "use server";
-    return searchMoviesByGenre(genreId, page);
-  }
+  const searchMoviesByGenreWithGenreId = searchMoviesByGenre.bind(
+    null,
+    genreId,
+  );
 
   return (
     <>
@@ -36,7 +32,7 @@ export default async function Genre({
 
       <MovieList
         initialMovieList={result.data}
-        fetchMore={fetchMore}
+        fetchMore={searchMoviesByGenreWithGenreId}
         error={result.error}
       />
     </>

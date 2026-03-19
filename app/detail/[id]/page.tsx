@@ -25,10 +25,7 @@ export default async function Detail({
 
   const similarMovieList = resultSimilar.success ? resultSimilar.data : [];
 
-  async function fetchMore(page: number) {
-    "use server";
-    return similarMovies(movieId, page);
-  }
+  const similarMoviesWithMovieId = similarMovies.bind(null, movieId);
 
   return (
     <div className="p-6">
@@ -66,7 +63,7 @@ export default async function Detail({
           <h3>Similar Movies</h3>
           <MovieList
             initialMovieList={similarMovieList}
-            fetchMore={fetchMore}
+            fetchMore={similarMoviesWithMovieId}
           />
         </div>
       )}
