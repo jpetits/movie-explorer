@@ -23,8 +23,6 @@ export default async function Movie({
     fetchSimilarMovies(movieId, 1),
   ]);
 
-  const fetchSimilarMoviesWithMovieId = fetchSimilarMovies.bind(null, movieId);
-
   return (
     <div className="p-6">
       <BackButton />
@@ -61,7 +59,7 @@ export default async function Movie({
           <h3>Similar Movies</h3>
           <MovieList
             initialMovieList={similarMovieList}
-            fetchMore={fetchSimilarMoviesWithMovieId}
+            fetchMorePath={ROUTES.api.similarMovies(movieId.toString())}
           />
         </div>
       )}

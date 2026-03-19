@@ -2,6 +2,7 @@ import { fetchMoviesByGenre, fetchGenre } from "../../lib/data";
 import BackButton from "@/app/ui/backButton";
 import { notFound } from "next/navigation";
 import MovieList from "@/app/ui/movieList";
+import { ROUTES } from "@/app/routing/constants";
 
 export default async function Genre({
   params,
@@ -19,8 +20,6 @@ export default async function Genre({
     fetchGenre(genreId),
   ]);
 
-  const fetchMoviesByGenreWithGenreId = fetchMoviesByGenre.bind(null, genreId);
-
   return (
     <>
       <BackButton />
@@ -28,7 +27,7 @@ export default async function Genre({
 
       <MovieList
         initialMovieList={result}
-        fetchMore={fetchMoviesByGenreWithGenreId}
+        fetchMorePath={ROUTES.api.moviesByGenre(genreId.toString())}
       />
     </>
   );

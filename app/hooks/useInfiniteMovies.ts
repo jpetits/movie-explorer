@@ -4,13 +4,17 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 export function useInfiniteMovies(
   initialMovieList: Movie[],
-  fetchMore: (page: number) => Promise<Movie[]>,
+  fetchMorePath: string,
   ref: React.RefObject<HTMLDivElement | null>,
 ) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
     useInfiniteQuery({
-      queryKey: ["movies"],
-      queryFn: async ({ pageParam }) => await fetchMore(pageParam),
+      queryKey: ["movies" + fetchMorePath],
+      queryFn: async ({ pageParam }) => {
+        const url = new URL(fetchMorePath, window.location.origin);
+        url.searchParams.set("page", String(pageParam));
+        return await fetch(url.toString()).then((res) => res.json());
+      },
       initialPageParam: 1,
       getNextPageParam: (lastPage, _, lastPageParam) =>
         lastPage.length > 0 ? lastPageParam + 1 : undefined,

@@ -6,18 +6,18 @@ import MovieList from "./movieList";
 export default function SearchMovie({
   initialMovieList,
   searchQuery,
-  searchMovies,
+  fetchMorePath,
 }: {
   initialMovieList: Movie[];
   searchQuery: string;
-  searchMovies: (query: string, page: number) => Promise<Movie[]>;
+  fetchMorePath: string;
 }) {
   return (
     <div className="mt-6">
       {searchQuery && (
         <MovieList
           initialMovieList={initialMovieList}
-          fetchMore={(page) => searchMovies(searchQuery, page)}
+          fetchMorePath={fetchMorePath}
         />
       )}
     </div>

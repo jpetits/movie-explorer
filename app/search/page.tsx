@@ -3,6 +3,7 @@ import { searchMovies } from "../lib/data";
 import SearchInput from "@/app/ui/search";
 import { Suspense } from "react";
 import { SearchSkeleton } from "../ui/skeletons";
+import { ROUTES } from "../routing/constants";
 
 export default async function Search({
   searchParams,
@@ -21,7 +22,7 @@ export default async function Search({
         <SearchMovie
           initialMovieList={data}
           searchQuery={queryString}
-          searchMovies={searchMovies}
+          fetchMorePath={ROUTES.api.searchMovies(queryString)}
         />
       </Suspense>
     </div>

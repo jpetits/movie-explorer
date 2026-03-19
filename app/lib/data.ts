@@ -40,8 +40,7 @@ export async function fetchSimilarMovies(
 ): Promise<Movie[]> {
   return getTmdb()
     .movies.similar(movieId, { page })
-    .then((data) => MovieListSchema.parse(data.results))
-    .catch(() => []);
+    .then((data) => MovieListSchema.parse(data.results));
 }
 
 export async function fetchGenre(id: number): Promise<Genre> {

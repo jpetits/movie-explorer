@@ -7,16 +7,16 @@ import { useInfiniteMovies } from "../hooks/useInfiniteMovies";
 
 export default function MovieList({
   initialMovieList,
-  fetchMore,
+  fetchMorePath,
 }: {
   initialMovieList: Movie[];
-  fetchMore: (page: number) => Promise<Movie[]>;
+  fetchMorePath: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const { data, isFetchingNextPage, error } = useInfiniteMovies(
     initialMovieList,
-    fetchMore,
+    fetchMorePath,
     ref,
   );
 
