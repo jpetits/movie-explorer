@@ -1,5 +1,23 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SearchMovie from "./searchMovie";
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  function wrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+  }
+
+  return wrapper;
+}
+
+beforeEach(() => {
+  global.fetch = jest.fn();
+});
 
 jest.mock("next/navigation", () => ({
   useSearchParams: jest.fn(),
@@ -7,30 +25,44 @@ jest.mock("next/navigation", () => ({
   usePathname: () => "/search",
 }));
 
+const mockObserve = jest.fn();
+const mockDisconnect = jest.fn();
+
+global.IntersectionObserver = jest.fn().mockImplementation((callback) => ({
+  observe: mockObserve,
+  disconnect: mockDisconnect,
+  unobserve: jest.fn(),
+}));
+
 describe("SearchMovie", () => {
   it("renders MovieList when searchQuery is provided", () => {
-    const mockSearchMovies = jest.fn();
     render(
       <SearchMovie
-        initialMovieList={[]}
-        searchQuery="Inception"
-        searchMovies={mockSearchMovies}
+        initialMovieList={[
+          {
+            id: 1,
+            title: "Inception",
+            release_date: "2010-07-16",
+            vote_average: 8.8,
+          },
+        ]}
+        searchQuery="inception"
+        fetchMorePath="/search?query=inception"
       />,
+      { wrapper: createWrapper() },
     );
-
-    expect(screen.getByText("No movies found.")).toBeInTheDocument();
+    expect(screen.getByText("Inception")).toBeInTheDocument();
   });
 
-  it("does not render MovieList when searchQuery is empty", () => {
-    const mockSearchMovies = jest.fn();
-    render(
+  it("renders nothing when searchQuery is empty", () => {
+    const { container } = render(
       <SearchMovie
         initialMovieList={[]}
         searchQuery=""
-        searchMovies={mockSearchMovies}
+        fetchMorePath="/search?query="
       />,
+      { wrapper: createWrapper() },
     );
-
-    expect(screen.queryByText("No movies found.")).not.toBeInTheDocument();
+    expect(container.firstChild?.firstChild).toBeNull();
   });
 });

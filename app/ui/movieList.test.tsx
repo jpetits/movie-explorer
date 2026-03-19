@@ -1,6 +1,5 @@
 import MovieList from "./movieList";
 import { render, screen } from "@testing-library/react";
-import { fetchPopularMovies } from "../lib/data";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function createWrapper() {
@@ -16,9 +15,9 @@ function createWrapper() {
   return wrapper;
 }
 
-jest.mock("../lib/data", () => ({
-  fetchPopularMovies: jest.fn(),
-}));
+beforeEach(() => {
+  global.fetch = jest.fn();
+});
 
 jest.mock("next/navigation", () => ({
   useSearchParams: jest.fn(),
@@ -60,14 +59,17 @@ describe("MovieList", () => {
             vote_average: 8.8,
           },
         ]}
-        fetchMore={fetchPopularMovies}
+        fetchMorePath="/api/movies/popular"
       />,
       { wrapper: createWrapper() },
     );
 
-    (fetchPopularMovies as jest.Mock).mockResolvedValue({
-      success: true,
-      data: [
+    expect(await screen.findByText(/inception/i)).toBeInTheDocument();
+    expect(screen.queryByText(/the dark knight/i)).not.toBeInTheDocument();
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => [
         {
           id: 2,
           title: "The Dark Knight",
@@ -76,14 +78,10 @@ describe("MovieList", () => {
         },
       ],
     });
-    expect(await screen.findByText(/inception/i)).toBeInTheDocument();
-    expect(screen.queryByText(/the dark knight/i)).not.toBeInTheDocument();
 
     triggerIntersection!([
       { isIntersecting: true } as IntersectionObserverEntry,
     ]);
     expect(await screen.findByText(/the dark knight/i)).toBeInTheDocument();
-
-    expect(fetchPopularMovies).toHaveBeenCalledWith(2);
   });
 });
