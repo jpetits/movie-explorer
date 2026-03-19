@@ -13,10 +13,10 @@ export default function MovieTile({ movie }: { movie: Movie }) {
 
   return (
     <Link
+      prefetch={false}
       key={movie.id}
       href={ROUTES.movie(movie.id.toString())}
-      className="group relative block
-  rounded-sm bg-zinc-90"
+      className="group relative block rounded-sm bg-zinc-90"
     >
       <div className="aspect-2/3 relative">
         {poster_path && !imgError ? (
