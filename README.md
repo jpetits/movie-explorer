@@ -1,7 +1,7 @@
 # Movie Explorer
 
 A movie browsing app built with Next.js 15, featuring infinite scroll, search, and genre filtering.
-- Deployed at [movie-explorer-xi-one.vercel.app](https://www.movie-explorer-xi-one.vercel.app)
+- Deployed at [movie-explorer-xi-one.vercel.app](https://movie-explorer-xi-one.vercel.app)
 
 ## Stack
 
