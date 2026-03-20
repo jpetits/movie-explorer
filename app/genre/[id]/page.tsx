@@ -1,4 +1,4 @@
-import { fetchMoviesByGenre, fetchGenre } from "../../lib/data";
+import { fetchDiscoverMovies, fetchGenre } from "../../lib/data";
 import BackButton from "@/app/ui/dashboard/backButton";
 import { notFound } from "next/navigation";
 import MovieList from "@/app/ui/movies/movieList";
@@ -29,7 +29,7 @@ export default async function Genre({
   }
 
   const [result, genre] = await Promise.all([
-    fetchMoviesByGenre(genreId, 1),
+    fetchDiscoverMovies({ genreId, page: 1 }),
     fetchGenre(genreId),
   ]);
 
@@ -41,7 +41,7 @@ export default async function Genre({
       </div>
       <MovieList
         initialMovieList={result}
-        fetchMorePath={ROUTES.api.moviesByGenre(genreId.toString())}
+        fetchMorePath={ROUTES.api.discover({ genreId })}
       />
     </>
   );

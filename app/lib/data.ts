@@ -3,10 +3,18 @@
 import { cache } from "react";
 import { z } from "zod";
 import { getTmdb } from "./tmdb";
-import { MovieSchema, Movie, Genre, GenreSchema } from "./schema";
+import {
+  MovieSchema,
+  Movie,
+  Genre,
+  GenreSchema,
+  ActorListSchema,
+  MovieListSchema,
+  Actor,
+  ActorSchema,
+} from "./schema";
 import { notFound } from "next/navigation";
-
-const MovieListSchema = z.array(MovieSchema);
+import { DiscoverFilters } from "./schema";
 
 export async function fetchPopularMovies(page = 1): Promise<Movie[]> {
   return getTmdb()
@@ -17,15 +25,6 @@ export async function fetchPopularMovies(page = 1): Promise<Movie[]> {
 export async function searchMovies(query: string, page = 1): Promise<Movie[]> {
   return getTmdb()
     .search.movies({ query, page })
-    .then((data) => MovieListSchema.parse(data.results));
-}
-
-export async function fetchMoviesByGenre(
-  genreId: number,
-  page = 1,
-): Promise<Movie[]> {
-  return getTmdb()
-    .discover.movie({ with_genres: genreId.toString(), page })
     .then((data) => MovieListSchema.parse(data.results));
 }
 
@@ -53,3 +52,33 @@ export const fetchGenre = cache(async (id: number): Promise<Genre> => {
       return GenreSchema.parse(genre);
     });
 });
+
+export async function fetchPopularActors(page = 1): Promise<Actor[]> {
+  return getTmdb()
+    .people.popular({ page })
+    .then((data) => ActorListSchema.parse(data.results));
+}
+
+export const fetchActor = cache(async (id: number): Promise<Actor> => {
+  return getTmdb()
+    .people.details(id)
+    .then((data) => ActorSchema.parse(data));
+});
+
+export async function fetchDiscoverMovies({
+  ...filters
+}: DiscoverFilters): Promise<Movie[]> {
+  return getTmdb()
+    .discover.movie({
+      with_genres: filters.genreId ? String(filters.genreId) : undefined,
+      with_cast: filters.actorId ? String(filters.actorId) : undefined,
+      page: filters.page,
+    })
+    .then((data) => MovieListSchema.parse(data.results));
+}
+
+export async function fetchActorsByMovie(movieId: number): Promise<Actor[]> {
+  return getTmdb()
+    .movies.credits(movieId)
+    .then((data) => ActorListSchema.parse(data.cast));
+}

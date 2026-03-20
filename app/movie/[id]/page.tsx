@@ -1,12 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchMovie, fetchSimilarMovies } from "../../lib/data";
+import {
+  fetchMovie,
+  fetchSimilarMovies,
+  fetchActorsByMovie,
+} from "../../lib/data";
 import BackButton from "@/app/ui/dashboard/backButton";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { formatDate } from "@/app/lib/utils";
 import { ROUTES } from "@/app/routing/constants";
 import MovieList from "@/app/ui/movies/movieList";
+import ActorCarousel from "@/app/ui/actors/actorCarousel";
 
 export async function generateMetadata({
   params,
@@ -36,9 +41,10 @@ export default async function Movie({
   if (!movieId) {
     notFound();
   }
-  const [movie, similarMovieList] = await Promise.all([
+  const [movie, similarMovieList, actors] = await Promise.all([
     fetchMovie(movieId),
     fetchSimilarMovies(movieId, 1),
+    fetchActorsByMovie(movieId),
   ]);
 
   return (
@@ -93,6 +99,9 @@ export default async function Movie({
             ))}
           </div>
         </div>
+      </div>
+      <div className="mt-12">
+        <ActorCarousel actors={actors} />
       </div>
       {similarMovieList.length > 0 && (
         <div className="mt-12">
