@@ -15,7 +15,7 @@ export default function MovieList({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { data, isFetchingNextPage, error } = usePaginatedScroll<Movie>(
+  const { allItems, isFetchingNextPage, error } = usePaginatedScroll<Movie>(
     initialMovieList,
     fetchMorePath,
     ref,
@@ -23,23 +23,16 @@ export default function MovieList({
 
   return (
     <div className="flex flex-col gap-3">
-      {data.pages.map((page, pageIndex) => (
-        <div
-          key={pageIndex}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3"
-        >
-          {page.map((movie: Movie, index: number) => (
-            <MovieTile
-              key={movie.id}
-              movie={movie}
-              priority={pageIndex === 0 && index < 6}
-            />
+      {allItems.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          {allItems.map((movie: Movie, index: number) => (
+            <MovieTile key={movie.id} movie={movie} priority={index < 6} />
           ))}
         </div>
-      ))}
+      )}
       <div ref={ref} />
       {isFetchingNextPage && !error && <MovieListSkeleton />}
-      {!isFetchingNextPage && data.pages[0].length === 0 && (
+      {!isFetchingNextPage && allItems.length === 0 && (
         <p className="mt-12 text-center text-zinc-400">No movies found.</p>
       )}
     </div>

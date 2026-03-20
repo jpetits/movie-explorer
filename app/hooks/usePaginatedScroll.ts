@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export function usePaginatedScroll<T>(
@@ -43,5 +43,7 @@ export function usePaginatedScroll<T>(
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, error, ref]);
 
-  return { data, hasNextPage, isFetchingNextPage, error };
+  const allItems = useMemo(() => data.pages.flat(), [data.pages]);
+
+  return { data, allItems, hasNextPage, isFetchingNextPage, error };
 }
