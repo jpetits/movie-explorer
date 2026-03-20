@@ -2,21 +2,25 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 export default function SearchInput() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleSearch = useDebouncedCallback((value: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set("query", value);
-    } else {
-      params.delete("query");
-    }
-    replace(`${pathname}?${params.toString()}`);
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams);
+      if (value) {
+        params.set("query", value);
+      } else {
+        params.delete("query");
+      }
+      replace(`${pathname}?${params.toString()}`);
+    });
   }, 500);
 
   return (
@@ -32,6 +36,9 @@ export default function SearchInput() {
         }}
         defaultValue={searchParams.get("query")?.toString()}
       />
+      {isPending && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 h-3 w-3 rounded-full border-2 border-zinc-400 border-t-transparent animate-spin" />
+      )}
       <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400 pointer-events-none" />
     </div>
   );
