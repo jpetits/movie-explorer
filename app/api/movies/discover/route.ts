@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { fetchDiscoverMovies } from "@/app/lib/data";
 import { DiscoverParamsSchema } from "@/app/lib/schema";
 
