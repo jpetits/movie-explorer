@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Movie } from "../../lib/schema";
 import { ROUTES } from "../../routing/constants";
 import { formatDate } from "../../lib/utils";
 import { tmdbImageUrl } from "../../lib/tmdb";
 import { StarIcon } from "@heroicons/react/24/outline";
 
-export default function MovieTile({
+const MovieTile = memo(function MovieTile({
   movie,
   priority,
 }: {
@@ -58,4 +58,6 @@ export default function MovieTile({
       </div>
     </Link>
   );
-}
+});
+
+export default MovieTile;

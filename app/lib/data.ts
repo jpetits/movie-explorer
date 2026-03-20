@@ -30,7 +30,6 @@ export async function fetchMoviesByGenre(
 }
 
 export const fetchMovie = cache(async (id: number): Promise<Movie> => {
-  console.log("fetchMovie called", id);
   return getTmdb()
     .movies.details(id)
     .then((data) => MovieSchema.parse(data));
