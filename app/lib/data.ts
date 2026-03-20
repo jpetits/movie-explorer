@@ -1,7 +1,6 @@
 "use server";
 
 import { cache } from "react";
-import { z } from "zod";
 import { getTmdb } from "./tmdb";
 import {
   MovieSchema,
