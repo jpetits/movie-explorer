@@ -62,7 +62,6 @@ pnpm dev
 
 ```bash
 pnpm test
-pnpm test
 pnpm typecheck
 ```
 
